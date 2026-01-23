@@ -14,7 +14,7 @@ RECOMMENDED_SERVICES = [
     {
         "name": "AbuseIPDB",
         "url": "https://www.abuseipdb.com/register",
-        "desc": "IP address abuse reports (Free Tier: 3000 checks/day)",
+        "desc": "Blacklist Download (10k IPs) & IP Validation",
         "env_var": "ABUSEIPDB_API_KEY"
     },
     {

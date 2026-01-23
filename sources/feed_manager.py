@@ -1,6 +1,7 @@
 import requests
 import logging
 from typing import List, Set
+from .abuseipdb_feed import fetch_abuseipdb_blacklist
 
 logger = logging.getLogger("ThreatIntel")
 
@@ -50,6 +51,11 @@ class FeedManager:
         for source in self.sources:
             feed_iocs = self.fetch_feed(source)
             all_iocs.update(feed_iocs)
+
+        # Fetch AbuseIPDB Blacklist
+        abuse_ips = fetch_abuseipdb_blacklist()
+        if abuse_ips:
+            all_iocs.update(abuse_ips)
 
         logger.info(f"Total raw indicators fetched: {len(all_iocs)}")
         return all_iocs
