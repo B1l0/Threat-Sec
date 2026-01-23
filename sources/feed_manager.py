@@ -13,6 +13,7 @@ class FeedManager:
     # Default public feeds
     DEFAULT_SOURCES = [
         "https://urlhaus.abuse.ch/downloads/text_online/",  # URLHaus Online URLs
+        "https://urlhaus.abuse.ch/downloads/text/",         # URLHaus Full URLs
         "https://openphish.com/feed.txt"                    # OpenPhish Free Feed
     ]
 
