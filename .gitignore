@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+bad_motherfuckerz.txt
+.pytest_cache/
