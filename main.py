@@ -1,5 +1,7 @@
 import os
 import logging
+import argparse
+import sys
 from dotenv import load_dotenv
 from utils.logger import setup_logger
 from utils.file_ops import read_file_lines, write_output_file
@@ -93,6 +95,15 @@ def validate_candidates(candidates: set, vt_client: VirusTotalClient, abuse_clie
     return validated
 
 def main():
+    parser = argparse.ArgumentParser(description="ThreatIntel Aggregator")
+    parser.add_argument("--conf", action="store_true", help="Launch configuration menu")
+    args = parser.parse_args()
+
+    if args.conf:
+        from utils.config_menu import run_configuration_wizard
+        run_configuration_wizard()
+        sys.exit(0)
+
     logger = setup_logger()
     logger.info("Starting ThreatIntel Aggregator...")
 
