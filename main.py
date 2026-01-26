@@ -23,7 +23,9 @@ REMOVE_REQUESTS_FILE = "input/remove_requests.txt"
 def validate_candidates(candidates: set, vt_client: VirusTotalClient, abuse_client: AbuseIPDBClient) -> set:
     """
     Validates a set of candidates against VT and AbuseIPDB.
-    Returns only those that are confirmed malicious or could not be checked (fail-safe).
+    Follows a FAIL-OPEN policy: Manual additions are trusted by default.
+    Validation is used for enrichment/logging (confirming maliciousness).
+    Returns all candidates, logging any confirmed malicious findings.
     """
     logger = logging.getLogger("ThreatIntel")
     validated = set()
@@ -65,32 +67,14 @@ def validate_candidates(candidates: set, vt_client: VirusTotalClient, abuse_clie
                     logger.info(f"[{item}] CONFIRMED Malicious by AbuseIPDB")
 
         # Decision Logic
-        # If confirmed malicious -> Keep
-        # If not confirmed (SAFE) -> Drop?
-        # If we couldn't check (Quota/Error) -> Keep (Benefit of the doubt for manual adds)
-
-        # Current implementation of clients returns False on error/quota to keep interface simple.
-        # This means we might drop items if API is down.
-        # ideally clients should return (bool, status).
-        # But per requirements "validation ... (si quota disponible)".
-        # I'll stick to: If API says safe, we drop. If API fails, we keep?
-        # Actually my client implementation returns False on error.
-        # I should probably trust the manual input if validation fails?
-        # For safety, I will only drop if EXPLICITLY safe.
-        # But my clients don't distinguish "Safe" from "Error" easily in the bool return.
-        # I will assume that if the user manually added it, they want it there unless proven otherwise.
-        # However, to demonstrate validation, I will only keep it if is_malicious is True OR if we assume trust.
-
-        # Let's trust the Manual Add mostly. The validation is an "Enrichment/Gatekeeper".
-        # If is_malicious is True: Definitely Add.
-        # If False: It might be safe.
-        # Given "Rôle: Analyste Sécurité", removing false positives is key.
-        # I will DROP it if it's not confirmed malicious. This is stricter.
+        # REQUIREMENT UPDATE: Fail-Open Policy + Manual Priority.
+        # Even if validation fails or returns clean, we trust the manual addition.
 
         if is_malicious:
             validated.add(item)
         else:
-            logger.info(f"[{item}] Validation negative (or quota exceeded/error). Dropping from manual additions.")
+            logger.info(f"[{item}] Validation negative (or quota exceeded/error). Keeping in manual additions (Fail-Open/Manual Priority).")
+            validated.add(item)
 
     return validated
 
@@ -142,7 +126,16 @@ def main():
     # 6. Write Output
     write_output_file(OUTPUT_FILE, final_list)
 
-    # 7. Statistics
+    # 7. Clear Request Files (if successful)
+    if manual_adds:
+        write_output_file(ADD_REQUESTS_FILE, [])
+        logger.info(f"Cleared {ADD_REQUESTS_FILE} after processing.")
+
+    if manual_removes:
+        write_output_file(REMOVE_REQUESTS_FILE, [])
+        logger.info(f"Cleared {REMOVE_REQUESTS_FILE} after processing.")
+
+    # 8. Statistics
     added_count = len(set(final_list) - set(existing_list))
     removed_count = len(set(existing_list) - set(final_list))
 

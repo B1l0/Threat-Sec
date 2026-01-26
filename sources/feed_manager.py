@@ -14,7 +14,8 @@ class FeedManager:
     DEFAULT_SOURCES = [
         "https://urlhaus.abuse.ch/downloads/text_online/",  # URLHaus Online URLs
         "https://urlhaus.abuse.ch/downloads/text/",         # URLHaus Full URLs
-        "https://openphish.com/feed.txt"                    # OpenPhish Free Feed
+        "https://openphish.com/feed.txt",                   # OpenPhish Free Feed
+        "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-porn-only/hosts"  # StevenBlack Fake News + Porn
     ]
 
     def __init__(self, sources: List[str] = None):
@@ -35,7 +36,18 @@ class FeedManager:
                 line = line.strip()
                 if not line or line.startswith("#"):
                     continue
-                iocs.add(line)
+
+                # Handle HOSTS format (0.0.0.0 domain.com or 127.0.0.1 domain.com)
+                if line.startswith("0.0.0.0") or line.startswith("127.0.0.1"):
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        # parts[1] is typically the domain
+                        # strip any trailing comments if they exist on the same line (though # check handles start)
+                        domain = parts[1].strip()
+                        iocs.add(domain)
+                else:
+                    # Standard list format
+                    iocs.add(line)
 
             logger.info(f"Fetched {len(iocs)} indicators from {url}")
 
