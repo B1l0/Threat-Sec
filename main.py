@@ -16,6 +16,7 @@ load_dotenv()
 
 # Constants
 OUTPUT_FILE = "bad_motherfuckerz.txt"
+HOST_OUTPUT_FILE = "bad_motherfuckerz_host.txt"
 WHITELIST_FILE = "whitelist.txt"
 ADD_REQUESTS_FILE = "input/add_requests.txt"
 REMOVE_REQUESTS_FILE = "input/remove_requests.txt"
@@ -125,6 +126,10 @@ def main():
 
     # 6. Write Output
     write_output_file(OUTPUT_FILE, final_list)
+    
+    # Write HOSTS format output
+    host_format_list = [f"0.0.0.0 {item}" for item in final_list]
+    write_output_file(HOST_OUTPUT_FILE, host_format_list)
 
     # 7. Clear Request Files (if successful)
     if manual_adds:
