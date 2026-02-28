@@ -37,6 +37,7 @@ jobs:
         git config --global user.name 'ThreatIntel Bot'
         git config --global user.email 'bot@noreply.github.com'
         git add bad_motherfuckerz.txt
+        git add bad_motherfuckerz_host.txt
         # Check if there are changes to commit
         if git diff --staged --quiet; then
           echo "No changes to commit."
