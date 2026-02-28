@@ -45046,6 +45046,7 @@
 0.0.0.0 185.196.10.225
 0.0.0.0 185.196.10.226
 0.0.0.0 185.196.10.227
+0.0.0.0 185.196.10.230
 0.0.0.0 185.196.10.237
 0.0.0.0 185.196.10.248
 0.0.0.0 185.196.10.253
@@ -109826,6 +109827,7 @@
 0.0.0.0 doctruyennguoilonvl.wordpress.com
 0.0.0.0 documentingreality.com
 0.0.0.0 documento430.clarovisor.icu
+0.0.0.0 documentos.microsoft-waresystems.com
 0.0.0.0 documentspdfsharingfilesaxweoa.pages.dev
 0.0.0.0 documentvip.cybergeex.co.za
 0.0.0.0 docunotice.com
@@ -149010,7 +149012,6 @@
 0.0.0.0 ravishingredheads.escortbook.com
 0.0.0.0 ravku.com
 0.0.0.0 raw-momonga.com
-0.0.0.0 raw.githubusercontent.com
 0.0.0.0 rawattack.com
 0.0.0.0 rawdollars.com
 0.0.0.0 rawgif.com
