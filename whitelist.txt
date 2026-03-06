@@ -1171,7 +1171,7 @@ odoo.com.co
 odoo.com.pe
 odoo.com.ve
 odoo.com.cl
-raw.githubusercontent.com
+githubusercontent.com
 odoo.com.ec
 odoo.com.bo
 odoo.com.py
